@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuore con Musica e Testo Sincronizzato</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #f0f0f0;
+      text-align: center;
+      background-image: url(/img/1.jpg);
+    }
+
+    .heart {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      transform: rotate(-45deg);
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -50px;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: 50px;
+    }
+
+    /* Stile per il testo */
+    .lyrics {
+      font-size: 20px;
+      margin-top: 20px;
+      height: 50px; /* altezza per evitare salto del layout */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1s;
+      background-color: #f0f0f0;      
+    }
+
+
+    
+  </style>
+</head>
+<body>
+  <div class="heart"></div>
+
+  <!-- Contenitore per il testo sincronizzato -->
+  <div id="lyrics-container" class="lyrics"></div>
+
+  <!-- Aggiunta dell'audio -->
+  <audio id="audio" controls autoplay>
+    <source src="/audio/Un Amore Senza Fine.mp3" type="audio/mpeg">
+    Il tuo browser non supporta l'elemento audio.
+  </audio>
+
+  
+
+  
+
+  <script>
+    const lyrics = [
+      "Era fine maggio quando ti ho incontrata,",
+      "Un sorriso e il cuore mio si è fermato.",
+      "Abbiamo preso strade senza direzione,",
+      "Ma insieme, ogni passo era una canzone.",
+      "Dal mare blu profondo alle montagne alte,",
+      "Con il vento tra i capelli e le mani intrecciate.",
+      "Foreste verdi e castelli d’altri tempi,",
+      "Ogni luogo un ricordo, ogni istante un sentimento.",
+      "Matteo e Veronica, un amore senza fine,",
+      "Tra sogni e realtà, tra gioie e spine.",
+      "Abbiamo viaggiato, il mondo abbiamo visto,",
+      "Ma nel tuo sguardo io ho trovato il mio paradiso.",
+      "A Parigi, sotto un cielo di mille stelle,",
+      "Era il tuo compleanno, e tu eri la più bella.",
+      "Ogni parola dolce, ogni bacio una promessa,",
+      "Di stare insieme per sempre, qualsiasi cosa accada.",
+      "Abbiamo superato tempeste e momenti bui,",
+      "Ma l’amore ci ha portato sempre più vicini.",
+      "Ora il futuro è chiaro, il cuore è leggero,",
+      "Con te al mio fianco, non temo nulla davvero.",
+      "Matteo e Veronica, un amore senza fine,",
+      "Tra sogni e realtà, tra gioie e spine.",
+      "Abbiamo viaggiato, il mondo abbiamo visto,",
+      "Ma nel tuo sguardo io ho trovato il mio paradiso.",
+      "E quando guardo avanti, vedo solo noi,",
+      "Oltre il tempo e lo spazio, vivremo i nostri eroi.",
+      "Ogni lacrima, ogni sorriso ci ha resi più forti,",
+      "Perché insieme siamo invincibili, oltre tutte le sorti.",
+      "Matteo e Veronica, un amore senza fine,",
+      "Tra sogni e realtà, tra gioie e spine.",
+      "Abbiamo viaggiato, il mondo abbiamo visto,",
+      "Ma nel tuo abbraccio io ho trovato il mio porto sicuro."
+    ];
+
+    const timings = [
+  0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 
+  76, 80, 84, 88, 92, 96, 100, 104, 108
+  ];
+
+    const lyricsContainer = document.getElementById('lyrics-container');
+    const audio = document.getElementById('audio');
+
+    audio.addEventListener('timeupdate', () => {
+      const currentTime = audio.currentTime;
+
+      // Trova il verso che corrisponde al tempo corrente
+      for (let i = 0; i < timings.length; i++) {
+        if (currentTime >= timings[i] && (i === timings.length - 1 || currentTime < timings[i + 1])) {
+          lyricsContainer.textContent = lyrics[i];
+          lyricsContainer.style.opacity = 1; // Mostra il verso
+        } else if (currentTime >= timings[i + 1]) {
+          lyricsContainer.style.opacity = 0; // Nascondi il verso quando si passa al successivo
+        }
+      }
+    });
+  </script>
+</body>
+</html>
